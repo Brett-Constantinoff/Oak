@@ -24,7 +24,7 @@ In the planning phase, Oak will be a statically typed, functional programming la
 Variables will be handled pretty much identically to how C type languages handles variables, 
 variables will need to be intialized upon creation either with a value or the default value using {}
 ```
-int x {5};
+int x{5};
 string myString{"Hello"};
 float y{}; //initialized with default value
 array char{'a', 'b', 'c'};

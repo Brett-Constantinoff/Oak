@@ -21,13 +21,47 @@ In the planning phase, Oak will be a statically typed, functional programming la
 ## Initial Syntax Design(tentative)
 
 ### Variables
-Variables will be handled pretty much identically to how C type languages handles variables, 
-variables will need to be intialized upon creation either with a value or the default value using {}
+Oak will suppport all the variables a typical language uses. This includes int, float, double, long, char, 
+string, bool, as well as construct. A construct is Oak's version of struct.
+
+Variables can be declared as follows: 
 ```
-int x{5};
-string myString{"Hello"};
-float y{}; //initialized with default value
-array char{'a', 'b', 'c'};
+#this is a comment, and these are variabled declarations
+int a;
+string s;
+bool b;
+construct c;
+```
+
+Variables can be defined as follows: 
+```
+a{5};
+s{"Hello"};
+b{true};
+c{
+    float x{5.0};
+    float y{10.0};
+    float z{15.0};
+};
+```
+
+Initializing a variable can be done in two ways, the first is by providing your own value and 
+the second would be to provide the default value. The default values are:
+* int: 0
+* float: 0.0
+* double: 0.0
+* long: 0
+* char: ''
+* string: ""
+* bool: true #notice the default value for bools is true
+
+An example is as follows: 
+```
+int a{}; #a is initialized with 0
+int b{5}; #b is initialized with 5
+string s{} #s is initialized with an empty string
+bool b{} #b is true
+char c{'e'}; #c is intialized with 'e'
 ```
 
 ### Control Flow
@@ -52,14 +86,12 @@ finally is(x == y) ? {
 ### Loops
 Oak will support two types of loop called a 'run' loop and an 'if' loop, which are essentially just a 'while' loop and 'for' loop
 ```
-int x{5};
-run(x > 1){
+run(int x{5} > 1){
     output(x);
     x -= 1;
 }
 
-int y{5};
-if(y > 0 : y -= 1){
+if(int y{5} : y -= 1){
     output(y);
 }
 ```

@@ -1,5 +1,6 @@
-Date: 02/10/2022
+# Date: 02/10/2022
 
+## The Work
 I was reccomended a book called "Compilers: Principles, Techniques and Tools" by a friend and realized its just over
 1000 pages......
 

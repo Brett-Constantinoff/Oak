@@ -1,0 +1,5 @@
+func void myFunction[in void]{
+    output("Hello World");
+    int x = 4;
+    out void;
+}

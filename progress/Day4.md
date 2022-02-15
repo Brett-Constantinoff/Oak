@@ -7,3 +7,6 @@ attribute to my token class which keeps track of which line the token occurs on.
 for error checking.
 
 Identifiers will also need to be added to the symbol table (which is yet to be implemented) but one thing at a time
+
+I came back and worked some more and got the lexer to identify all but char constants. Lots more testing and 
+cleanup needs to be done but this is a win for today

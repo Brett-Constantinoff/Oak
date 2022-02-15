@@ -2,27 +2,28 @@
 #include <fstream>
 #include <iostream>
 
+#define getChar(c) inputStream.get(c)
+#define peekNext() inputStream.peek()
+
 //static variables need to be defined here
 std::vector<Token> Lexer::m_tokens;
 
 //parses the characters from the source code file
-bool Lexer::tokenize(std::string file){
-
+void Lexer::tokenize(std::string file){
     //open source code file for reading
     std::fstream inputStream(file);
     //make sure it opened correctly
     if(!inputStream){
         std::cout << "ERROR READING SOURCE FILE" << "\n";
-        return false;
+        exit(EXIT_FAILURE);
     }
-
     char c{};
     char next{};
     std::string lexeme{};
     int currentLine = 1;
     //get the current char and peek the next char
-    while(inputStream.get(c)){
-        next = inputStream.peek();
+    while(getChar(c)){
+        next = peekNext();
         //ignore whitespace
         if(c == ' ' || c == '\t'){
             continue;
@@ -34,64 +35,98 @@ bool Lexer::tokenize(std::string file){
         //ignores comments
         else if(c == '#'){
             while(c != '\n'){
-                inputStream.get(c);
+                getChar(c);
             }
             currentLine++;
         }
         //start of a string
         else if(c == '"'){
-            inputStream.get(c);
+            getChar(c);
+            //continually add chars until next quote is found
             while(c != '"'){
                lexeme += c;
-               inputStream.get(c);
+               getChar(c);
             }
-            m_tokens.emplace_back(TokenType::LITERAL, lexeme, currentLine);
-            lexeme.clear();
+            addToken(TokenType::LITERAL, lexeme, currentLine);
         }
         //start of a numerical constant
         else if(c >= '0' && c <= '9'){
             lexeme += c;
+            //continually add chars until a space or special char is found
             while(next != ' ' && !findChar(next, specials)){
-                inputStream.get(c);
+                getChar(c);
                 lexeme += c;
-                next = inputStream.peek();
+                next = peekNext();
             }
-            m_tokens.emplace_back(TokenType::NUMCONST, lexeme, currentLine);
-            lexeme.clear();
+            addToken(TokenType::NUMCONST, lexeme, currentLine);
         }
         //see if the current character is a special character
         else if(findChar(c, specials)){
             m_tokens.emplace_back(TokenType::SPECIAL, std::string(1, c), currentLine);
         }
         //see if the current character is an operator
+        //also determines if the operator is a dual operator(2 chars long)
         else if(findChar(c, operators)){
-            m_tokens.emplace_back(TokenType::OPERATOR, std::string(1, c), currentLine);
+            switch(c){
+                case '!':
+                    determineNextChar(next, c, '=', currentLine);
+                    break;
+                case '>':
+                    determineNextChar(next, c, '=', currentLine);
+                    break;
+                case '<':
+                    determineNextChar(next, c, '=', currentLine);
+                    break;
+                case '|':
+                    determineNextChar(next, c, '|', currentLine);
+                    break;
+                case '&':
+                    determineNextChar(next, c, '&', currentLine);
+                    break;
+                case '/':
+                    determineNextChar(next, c, '/', currentLine);
+                    break;
+                default:
+                    m_tokens.emplace_back(TokenType::OPERATOR, std::string(1, c), currentLine);
+                    break;
+            }
         }
         else{
             lexeme += c;
-            //while the next character isnt a space and its not a special character
+            //continually add chars while the next character isnt a space and its not a special character
             while(next != ' ' && !findChar(next, specials)){
-                inputStream.get(c);
+                getChar(c);
                 lexeme += c;
-                next = inputStream.peek();
+                next =  peekNext();
             }
+            //is the lexeme a keyword or identifier?
             determineLexeme(lexeme, currentLine);
         }
     }
-    return true;
+}
+
+//adds a new token to token vector
+void Lexer::addToken(int type, std::string& lexeme, int currentLine){
+    m_tokens.emplace_back(type, lexeme, currentLine);
+    lexeme.clear();
 }
 
 //determines if a lexeme is a keyword or identifier
 void Lexer::determineLexeme(std::string& lexeme, int currentLine){
     for(int i = 0; i < keyWords.size(); i++){
         if(lexeme == keyWords[i]){
-            m_tokens.emplace_back(TokenType::KEYWORD, lexeme, currentLine);
-            lexeme.clear();
+            addToken(TokenType::KEYWORD, lexeme, currentLine);
             return;
         }
     }
-    m_tokens.emplace_back(TokenType::INDENTIFIER, lexeme, currentLine);
-    lexeme.clear();
+    addToken(TokenType::INDENTIFIER, lexeme, currentLine);
+}
+
+//determines if an operator is a double operator(two characters long)
+void Lexer::determineNextChar(char next, char c, char op, int currentLine){
+    if(next == op){
+        m_tokens.emplace_back(TokenType::OPERATOR, std::string(2, c + next), currentLine);
+    }
 }
 
 //finds if given char is in the search vector

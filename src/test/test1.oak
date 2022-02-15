@@ -23,6 +23,16 @@ func int main[in void]{
 
     float my_float{5.18281};
 
+    is(x >= y) ? {
+        output("x is greater than y");
+    }
+    or is (y >= x) ? {
+        output("y is greater than x");
+    }
+    finally is(x = y) ?{
+        output("x and y are equal");
+    }
+
     char my_char{'e'};
     
     out void;

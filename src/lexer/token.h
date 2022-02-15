@@ -18,8 +18,9 @@ class Token{
     private:
         int m_type{};
         std::string m_lexeme{};
+        int m_line;
     public:
-        Token(int tokenType, std::string lexeme);
+        Token(int tokenType, std::string lexeme, int line);
         void print(void);
 };
 #endif

@@ -1,0 +1,29 @@
+func int main[in void]{
+    output("Hello World!\n");
+    #this is a comment as if for testing purposes
+
+    int x;
+    int y;
+    int z;
+
+    x{5};
+    y{8}; #this is also a comment, but on the same line as a vairable declaration
+
+    z{x + y};
+
+    #this is a 
+    #multi line comment
+
+    output(z);
+    string newString{"This is a string variable declaration!!!!"};
+    string newString12345{"This is also a string, but with numbers in the identifier!!!"};
+
+    string my_new_string{"This is a string in snake Case"};
+    string myNewString{"This is a string in camel Case"};
+
+    float my_float{5.18281};
+
+    char my_char{'e'};
+    
+    out void;
+}

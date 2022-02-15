@@ -1,5 +1,12 @@
-func void myFunction[in void]{
-    output("Hello World");
-    int x = 4;
-    out void;
+func int main[in void]{
+
+    string s1{"Hello"};
+    string s2{"World"};
+
+    float myFloat{5.674};
+    int myInt{10};
+
+    output(s1 + s2);
+
+    out 0;
 }

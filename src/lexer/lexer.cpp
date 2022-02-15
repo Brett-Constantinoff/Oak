@@ -85,6 +85,19 @@ void Lexer::tokenize(std::string file){
                     break;
                 case '/':
                     determineNextChar(next, c, '/', currentLine);
+                    determineNextChar(next, c, '=', currentLine);
+                    break;
+                case '+':
+                    determineNextChar(next, c, '=', currentLine);
+                    determineNextChar(next, c, '+', currentLine);
+                    break;
+                case '-':
+                    determineNextChar(next, c, '=', currentLine);
+                    determineNextChar(next, c, '-', currentLine);
+                    break;
+                case '*':
+                    determineNextChar(next, c, '*', currentLine);
+                    determineNextChar(next, c, '*', currentLine);
                     break;
                 default:
                     m_tokens.emplace_back(TokenType::OPERATOR, std::string(1, c), currentLine);

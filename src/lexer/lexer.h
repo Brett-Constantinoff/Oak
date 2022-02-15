@@ -14,7 +14,9 @@ static std::vector<std::string> keyWords = {
 
 static std::vector<std::string> operators = {
     "+", "-", "*", "/", "//", "&&", 
-    "||", "=", "!=", "?", ":"
+    "||", "=", "!=", "?", ":", "+=",
+    "-=", "*=", "/=", "++", "--", "%", 
+    "**"
 };
 
 static std::vector<std::string> specials = {

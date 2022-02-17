@@ -9,7 +9,8 @@ static std::vector<std::string> keyWords = {
     "func", "void", "in", "out", 
     "output", "int", "float", "char", 
     "array", "is", "or", "finally",
-    "run", "if", "input", "main", "string"
+    "run", "if", "input", "main", "string", 
+    "construct"
 };
 
 static std::vector<std::string> operators = {

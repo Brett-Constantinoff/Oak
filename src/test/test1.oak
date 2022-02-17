@@ -34,6 +34,12 @@ func int main[in void]{
     }
 
     char my_char{'e'};
+
+    construct myConstruct{
+        int x{};
+        int y{};
+        int z{};
+    };
     
     out void;
 }

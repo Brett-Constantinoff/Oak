@@ -1,4 +1,4 @@
-#include "lexer.h"
+#include "Lexer.h"
 #include <fstream>
 #include <iostream>
 
@@ -7,6 +7,7 @@
 
 //static variables need to be defined here
 std::vector<Token> Lexer::m_tokens;
+
 
 //parses the characters from the source code file
 void Lexer::tokenize(std::string file){

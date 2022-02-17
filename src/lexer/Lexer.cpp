@@ -120,7 +120,7 @@ void Lexer::tokenize(std::string file){
         else{
             lexeme += c;
             //continually add chars while the next character isnt a space and its not a special character
-            while(next != ' ' && std::string(1, next) != "'" && !findChar(next, specials)){
+            while(next != ' ' && !findChar(next, specials)){
                 getChar(c);
                 lexeme += c;
                 next =  peekNext();

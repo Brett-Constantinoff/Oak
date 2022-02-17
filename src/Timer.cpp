@@ -13,4 +13,4 @@ void Timer::stop(void){
     m_stop = std::chrono::high_resolution_clock::now();
     m_time = std::chrono::duration_cast<std::chrono::duration<double>>(m_stop - m_start);
     std::cout << "Proccess took " << m_time.count() << " seconds." << "\n";
-}
+};

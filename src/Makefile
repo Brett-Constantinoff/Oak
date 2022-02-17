@@ -7,8 +7,8 @@ all: oak
 oak: main.o lexer.o 
 	$(CC) *.o -o oak
 
-main.o: main.cpp	
-	$(CC) main.cpp $(CFLAGS)
+main.o: *.cpp *.h
+	$(CC) *.cpp $(CFLAGS)
 
 lexer.o: lexer/*.cpp lexer/*.h
 	$(CC) lexer/*.cpp $(CFLAGS)

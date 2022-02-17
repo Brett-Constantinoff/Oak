@@ -49,6 +49,18 @@ void Lexer::tokenize(std::string file){
             }
             addToken(TokenType::LITERAL, lexeme, currentLine);
         }
+        //single character
+        else if(std::string(1, c) == "'"){
+            getChar(c);
+            //continually add chars until ' is found
+            //doing it this way will allowing for error checking later, if 
+            //chars are longer than 1 character for instance
+            while(std::string(1, c) != "'"){
+                lexeme += c;
+                getChar(c);
+            }
+            addToken(TokenType::CHARCONST, lexeme, currentLine);
+        }
         //start of a numerical constant
         else if(c >= '0' && c <= '9'){
             lexeme += c;
@@ -96,7 +108,7 @@ void Lexer::tokenize(std::string file){
                     determineNextChar(next, c, '-', currentLine);
                     break;
                 case '*':
-                    determineNextChar(next, c, '*', currentLine);
+                    determineNextChar(next, c, '=', currentLine);
                     determineNextChar(next, c, '*', currentLine);
                     break;
                 default:
@@ -107,7 +119,7 @@ void Lexer::tokenize(std::string file){
         else{
             lexeme += c;
             //continually add chars while the next character isnt a space and its not a special character
-            while(next != ' ' && !findChar(next, specials)){
+            while(next != ' ' && std::string(1, next) != "'" && !findChar(next, specials)){
                 getChar(c);
                 lexeme += c;
                 next =  peekNext();

@@ -17,7 +17,7 @@ static std::vector<std::string> operators = {
     "+", "-", "*", "/", "//", "&&", 
     "||", "=", "!=", "?", ":", "+=",
     "-=", "*=", "/=", "++", "--", "%", 
-    "**"
+    "**", "<", ">", ">=", "<="
 };
 
 static std::vector<std::string> specials = {

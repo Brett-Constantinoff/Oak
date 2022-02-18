@@ -153,6 +153,9 @@ void Lexer::determineNextChar(char next, char c, char op, int currentLine){
     if(next == op){
         m_tokens.emplace_back(TokenType::OPERATOR, std::string(2, c + next), currentLine);
     }
+    else{
+        m_tokens.emplace_back(TokenType::OPERATOR, std::string(1, c), currentLine);
+    }
 }
 
 //finds if given char is in the search vector

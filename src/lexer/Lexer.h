@@ -33,9 +33,6 @@ class Lexer{
     private:    
         Lexer(){};
         static void addToken(int type, std::string& lexeme, int currentLine);
-        static bool findChar(char c, std::vector<std::string> searchVec);
-        static void determineLexeme(std::string& lexeme, int currentLine);
-        static void determineNextChar(char next, char c, char op, int currentLine);
     public:
         static void tokenize(std::string file);
         static void printTokens(void);

@@ -2,7 +2,8 @@
 #include "lexer/Token.h"
 #include "Timer.h"
 
-int main(int args, char** argv){
+int main(int args, char** argv)
+{
    
    Timer::start();
    Lexer::tokenize("test/test1.oak");

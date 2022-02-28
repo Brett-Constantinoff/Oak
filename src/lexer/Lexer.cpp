@@ -3,12 +3,8 @@
 #include <iostream>
 #include <algorithm>
 
-#define getChar(c) inputStream.get(c)
-#define peekNext() inputStream.peek()
-
 //static variables need to be defined here
 std::vector<Token> Lexer::m_tokens;
-
 
 //parses the characters from the source code file
 void Lexer::tokenize(const char* file)

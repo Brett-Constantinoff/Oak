@@ -11,109 +11,134 @@ std::vector<Token> Lexer::m_tokens;
 
 
 //parses the characters from the source code file
-void Lexer::tokenize(std::string file)
-{
-    //open source code file for reading
-    std::fstream inputStream(file);
-    //make sure it opened correctly
-    if(!inputStream){
-        std::cout << "ERROR READING SOURCE FILE" << "\n";
-        exit(EXIT_FAILURE);
-    }
-    char c{};
-    char next{};
-    std::string lexeme{};
+void Lexer::tokenize(const char* file)
+{   
+    FILE * fp;
+    long size;
+    char* buffer;
+    char* current;
+    char* next;
+    size_t result;
+    std::string lexeme;
     int currentLine = 1;
-    //get the current char and peek the next char
-    while( getChar(c) )
-    {
-        next = peekNext();
+
+    //open file for reading
+    fp = fopen(file, "rb");
+    if( !fp ){
+        std::cout << "ERROR OPENING SOURCE FILE" << "\n";
+        exit(1);
+    }
+    
+    //get size of file
+    fseek(fp, 0, SEEK_END);
+    size = ftell(fp);
+    rewind(fp);
+
+    //allocate memory
+    buffer = new char[size];
+    if( !buffer ){
+        std::cout << "ERROR ALLOCATING MEMORY FOR SOURCE FILE" << "\n";
+        exit(1);
+    }
+
+    //read file into memory
+    result = fread(buffer, 1, size, fp);
+    if( result != size ){
+        std::cout << "ERROR READING FILE INTO ALLOCATED MEMORY" << "\n";
+        exit(1);
+    }
+
+    current = buffer;
+    next = current + 1;
+    for(; current < buffer + size - 1; current++ )
+    {   
+        next = current + 1; 
         //ignore whitespace
-        if( c == ' ' || c == '\t' )
-        {
+        if( *current == ' ' || *current == '\t' )
+        {   
             continue;
         }
         //increase line count
-        else if( c == '\n' )
+        else if( *current == '\n' )
         {
             currentLine++;
         }
         //ignores comments
-        else if( c == '#' )
+        else if( *current == '#' )
         {
-            while( c != '\n' )
+            while( *current != '\n' )
             {
-                getChar(c);
+                current++;
             }
             currentLine++;
         }
         //start of a string
-        else if( c == '"' )
+        else if( *current == '"' )
         {
-            getChar(c);
+            current++;
             //continually add chars until next quote is found
-            while( c != '"' )
+            while( *current != '"' )
             {
-               lexeme += c;
-               getChar(c);
+               lexeme += *current;
+               current++;
             }
             addToken(TokenType::LITERAL, lexeme, currentLine);
         }
         //single character
-        else if( std::string(1, c) == "'" )
+        else if( std::string(1, *current) == "'" )
         {
-            getChar(c);
+            current++;
             //continually add chars until ' is found
             //doing it this way will allowing for error checking later, if 
             //chars are longer than 1 character for instance
-            while( std::string(1, c) != "'" )
+            while( std::string(1, *current) != "'" )
             {
-                lexeme += c;
-                getChar(c);
+                lexeme += *current;
+                current++;
             }
             addToken(TokenType::CHARCONST, lexeme, currentLine);
         }
         //start of a numerical constant
-        else if( c >= '0' && c <= '9' )
+        else if( *current >= '0' && *current <= '9' )
         {
-            lexeme += c;
+            lexeme += *current;
             //continually add chars until a space or special char is found
-            while( next != ' ' && !(std::find(specials.begin(), specials.end(), std::string(1, next)) != specials.end()) )
+            while( *next != ' ' && !(std::find(specials.begin(), specials.end(), std::string(1, *next)) != specials.end()) )
             {
-                getChar(c);
-                lexeme += c;
-                next = peekNext();
+                current++;
+                lexeme += *current;
+                next++;
             }
             addToken(TokenType::NUMCONST, lexeme, currentLine);
         }
         //see if the current character is a special character
-        else if( std::find(specials.begin(), specials.end(), std::string(1, c)) != specials.end() )
+        else if( std::find(specials.begin(), specials.end(), std::string(1, *current)) != specials.end() )
         {
-            m_tokens.emplace_back(TokenType::SPECIAL, std::string(1, c), currentLine);
+            m_tokens.emplace_back(TokenType::SPECIAL, std::string(1, *current), currentLine);
         }
         //see if the current character is an operator
         //also determines if the operator is a dual operator(2 chars long)
-        else if( std::find(operators.begin(), operators.end(), std::string(1, c)) != operators.end() )
+        else if( std::find(operators.begin(), operators.end(), std::string(1, *current)) != operators.end() )
         {
-            if( std::find(operators.begin(), operators.end(), std::string(1, next)) != operators.end() )
+            if( std::find(operators.begin(), operators.end(), std::string(1, *next)) != operators.end() )
             {
-                m_tokens.emplace_back(TokenType::OPERATOR, std::string(1, c) + next, currentLine);
+                m_tokens.emplace_back(TokenType::OPERATOR, std::string(1, *current) + *next, currentLine);
             }
             else
             {
-                m_tokens.emplace_back(TokenType::OPERATOR, std::string(1, c) , currentLine);
+                m_tokens.emplace_back(TokenType::OPERATOR, std::string(1, *current) , currentLine);
             }
-            getChar(c);
+            current++;
         }
         else
         {
-            lexeme += c;
+            lexeme += *current;
             //continually add chars while the next character isnt a space and its not a special character
-            while(next != ' ' && !( std::find(specials.begin(), specials.end(), std::string(1, next)) != specials.end() ))
+            while( *next != ' ' && !( std::find(specials.begin(), specials.end(), std::string(1, *next)) != specials.end() ))
             {
-                getChar(c);
-                lexeme += c;
-                next =  peekNext();
+                current++;
+                lexeme += *current;
+                next++;
             }
             //is the lexeme a keyword or identifier?
             if( (std::find(keyWords.begin(), keyWords.end(), lexeme) != keyWords.end()) )
@@ -126,6 +151,7 @@ void Lexer::tokenize(std::string file)
             }
         }
     }
+
 }
 
 //adds a new token to token vector
@@ -143,3 +169,4 @@ void Lexer::printTokens(void)
         token.print();
     }
 }
+

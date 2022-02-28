@@ -9,5 +9,5 @@ Token::Token(int tokenType, std::string lexeme, int line){
 }
 
 void Token::print(void){
-    std::cout << "TOKEN TYPE: " << m_type << " | " << "TOKEN LEXEME: " << m_lexeme << " | " << "LINE: " << m_line << "\n";
+    std::cout << "TOKEN TYPE: " << tokenTypeString[m_type] << " | " << "TOKEN LEXEME: " << m_lexeme << " | " << "LINE: " << m_line << "\n";
 };

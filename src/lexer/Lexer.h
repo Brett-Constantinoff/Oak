@@ -34,7 +34,7 @@ class Lexer{
         Lexer(){};
         static void addToken(int type, std::string& lexeme, int currentLine);
     public:
-        static void tokenize(std::string file);
+        static void tokenize(const char* file);
         static void printTokens(void);
 };
 

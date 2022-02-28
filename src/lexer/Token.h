@@ -14,6 +14,16 @@ enum TokenType{
     SPECIAL = 6, // . , {}, (), []
 };
 
+static std::string tokenTypeString[] = {
+    "KEYWORD",
+    "IDENTIFIER",
+    "OPERATOR",
+    "NUMCONST",
+    "CHARCONST",
+    "LITERAL",
+    "SPECIAL"
+};
+
 class Token{
     private:
         int m_type{};

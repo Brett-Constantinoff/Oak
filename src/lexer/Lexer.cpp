@@ -49,7 +49,6 @@ void Lexer::tokenize(const char* file)
     }
 
     current = buffer;
-    next = current + 1;
     for(; current < buffer + size - 1; current++ )
     {   
         next = current + 1; 
